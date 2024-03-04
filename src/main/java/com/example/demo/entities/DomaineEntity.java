@@ -51,4 +51,12 @@ public class DomaineEntity {
 	public void setPathImage(String pathImage) {
 		this.pathImage = pathImage;
 	}
+
+	public String getIdDomaine() {
+		return idDomaine;
+	}
+
+	public void setIdDomaine(String idDomaine) {
+		this.idDomaine = idDomaine;
+	}
 }
