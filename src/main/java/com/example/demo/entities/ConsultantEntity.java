@@ -24,6 +24,10 @@ public class ConsultantEntity {
 
     @ElementCollection
     private List<String> specialisation;
+    
+    @ManyToOne
+    @JoinColumn(name = "fk_id_domaine")
+    private DomaineEntity domaine;
 
     private String descriptionProfile;
     private boolean francais;
@@ -40,6 +44,7 @@ public class ConsultantEntity {
     private String cin;
     private String adresse;
     private String rib;
+    private String banque;
     private String photoProfile;
     
 	public Long getId() {
@@ -173,6 +178,18 @@ public class ConsultantEntity {
 	}
 	public void setPhotoProfile(String photoProfile) {
 		this.photoProfile = photoProfile;
+	}
+	public DomaineEntity getDomaine() {
+		return domaine;
+	}
+	public void setDomaine(DomaineEntity domaine) {
+		this.domaine = domaine;
+	}
+	public String getBanque() {
+		return banque;
+	}
+	public void setBanque(String banque) {
+		this.banque = banque;
 	}
 
     

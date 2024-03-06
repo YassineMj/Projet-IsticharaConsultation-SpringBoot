@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.entities.DomaineEntity;
 
 public interface DomaineRepository extends JpaRepository<DomaineEntity, Long> {
+	DomaineEntity findByIdDomaine(String idDomaine);
 }

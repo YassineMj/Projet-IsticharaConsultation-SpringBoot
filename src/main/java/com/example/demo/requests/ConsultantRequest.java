@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class ConsultantRequest {
 
-	private String idConsultant;
+	private String idDomaine;
 	private List<String> formations;
     private List<String> educations;
     private List<String> experiencesPro;
@@ -25,15 +25,11 @@ public class ConsultantRequest {
     private String numeroTelephone;
     private String cin;
     private String adresse;
+    private String banque;
     private String rib;
     private String photoProfile;
     
-	public String getIdConsultant() {
-		return idConsultant;
-	}
-	public void setIdConsultant(String idConsultant) {
-		this.idConsultant = idConsultant;
-	}
+
 	public List<String> getFormations() {
 		return formations;
 	}
@@ -153,6 +149,18 @@ public class ConsultantRequest {
 	}
 	public void setPhotoProfile(String  photoProfile) {
 		this.photoProfile = photoProfile;
+	}
+	public String getIdDomaine() {
+		return idDomaine;
+	}
+	public void setIdDomaine(String idDomaine) {
+		this.idDomaine = idDomaine;
+	}
+	public String getBanque() {
+		return banque;
+	}
+	public void setBanque(String banque) {
+		this.banque = banque;
 	}
 
 }

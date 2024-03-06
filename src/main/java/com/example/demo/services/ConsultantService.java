@@ -4,27 +4,42 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entities.ConsultantEntity;
+import com.example.demo.entities.DomaineEntity;
+import com.example.demo.methodeStatic.IdGenerator;
+import com.example.demo.reponses.ConsultantResponseDomaine;
 import com.example.demo.repositories.ConsultantRepository;
+import com.example.demo.repositories.DomaineRepository;
 import com.example.demo.requests.ConsultantRequest;
+
+import jakarta.persistence.criteria.Path;
 
 @Service
 public class ConsultantService {
 
     @Autowired
     private ConsultantRepository consultantRepository;
+    
+    @Autowired
+    private DomaineRepository domaineRepository;
 
     public String saveConsultant(ConsultantRequest consultantRequest) throws IOException {
+    	DomaineEntity domaineEntity=domaineRepository.findByIdDomaine(consultantRequest.getIdDomaine());
         // Enregistrez le profil du consultant dans la base de données
         ConsultantEntity consultantEntity = new ConsultantEntity();
+        consultantEntity.setIdConsultant(IdGenerator.generateId().toString());
         consultantEntity.setFormations(consultantRequest.getFormations());
         consultantEntity.setEducations(consultantRequest.getEducations());
         consultantEntity.setExperiencesPro(consultantRequest.getExperiencesPro());
+        consultantEntity.setDomaine(domaineEntity);
         consultantEntity.setSpecialisation(consultantRequest.getSpecialisation());
         consultantEntity.setDescriptionProfile(consultantRequest.getDescriptionProfile());
         consultantEntity.setFrancais(consultantRequest.isFrancais());
@@ -40,6 +55,7 @@ public class ConsultantService {
         consultantEntity.setNumeroTelephone(consultantRequest.getNumeroTelephone());
         consultantEntity.setCin(consultantRequest.getCin());
         consultantEntity.setAdresse(consultantRequest.getAdresse());
+        consultantEntity.setBanque(consultantRequest.getBanque());
         consultantEntity.setRib(consultantRequest.getRib());
 
         // Gérez le stockage de la photo de profil
@@ -60,6 +76,21 @@ public class ConsultantService {
 
         consultantRepository.save(consultantEntity);
         return consultantEntity.getIdConsultant();
+    }
+    
+    public List<ConsultantResponseDomaine> getConsultantsByDomaine(String idDomaine) {
+        List<ConsultantEntity> consultants = consultantRepository.findByDomaineIdDomaine(idDomaine);
+        
+        List<ConsultantResponseDomaine> listResponse = new ArrayList<>();
+        for (ConsultantEntity consultantEntity : consultants) {
+            ConsultantResponseDomaine responseDomaine = new ConsultantResponseDomaine();
+            BeanUtils.copyProperties(consultantEntity, responseDomaine);
+            java.nio.file.Path path = Paths.get(responseDomaine.getPhotoProfile());
+            responseDomaine.setPhotoProfile(path.getFileName().toString());
+            listResponse.add(responseDomaine);
+        }
+
+        return listResponse;
     }
     
     public void deleteConsultant(Long consultantId) {
