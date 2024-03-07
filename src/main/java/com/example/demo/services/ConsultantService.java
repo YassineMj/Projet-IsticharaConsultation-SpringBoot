@@ -7,6 +7,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,24 @@ public class ConsultantService {
 
         consultantRepository.save(consultantEntity);
         return consultantEntity.getIdConsultant();
+    }
+    
+    public ConsultantEntity getConsultantById(String idConsultant) {
+        try {
+            // Use the repository to find the consultant by ID
+            ConsultantEntity entityConsultant = consultantRepository.findByIdConsultant(idConsultant);
+
+            java.nio.file.Path path = Paths.get(entityConsultant.getPhotoProfile());
+            entityConsultant.setPhotoProfile(path.getFileName().toString());
+            // Return the consultant if present, otherwise return null
+            return entityConsultant;
+        } catch (Exception e) {
+            // Handle exceptions as needed (e.g., log the error)
+            e.printStackTrace(); // You may want to log the exception using a logging framework
+
+            // You might also want to throw a custom exception or handle it differently based on your use case
+            throw new RuntimeException("Error fetching consultant by ID: " + idConsultant, e);
+        }
     }
     
     public List<ConsultantResponseDomaine> getConsultantsByDomaine(String idDomaine) {

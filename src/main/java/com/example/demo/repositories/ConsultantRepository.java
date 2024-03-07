@@ -10,4 +10,5 @@ import com.example.demo.reponses.ConsultantResponseDomaine;
 
 public interface ConsultantRepository extends JpaRepository<ConsultantEntity, Long> {
 	List<ConsultantEntity> findByDomaineIdDomaine(String idDomaine);
+	ConsultantEntity findByIdConsultant(String idConsultant);
 }
