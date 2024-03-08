@@ -1,10 +1,12 @@
 package com.example.demo.controllers;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entities.ConsultantEntity;
 import com.example.demo.reponses.ConsultantResponseDomaine;
+import com.example.demo.repositories.ConsultantRepository;
+import com.example.demo.requests.ConsultantAuthRequest;
 import com.example.demo.requests.ConsultantRequest;
 import com.example.demo.services.ConsultantService;
 
@@ -74,6 +78,30 @@ public class ConsultantController {
         }
     }
 
+    @Autowired
+    private ConsultantRepository consultantRepository;
+    @PostMapping("/auth")
+    public ResponseEntity<?> authenticateUser(@RequestBody ConsultantAuthRequest loginRequest) {
+
+        // Recherche du consultant par email
+        Optional<ConsultantEntity> consultantOptional = consultantRepository.findByEmail(loginRequest.getEmail());
+
+        if (consultantOptional.isPresent()) {
+            ConsultantEntity consultant = consultantOptional.get();
+
+            // Vérification du mot de passe
+            if (consultant.getMotDePasse().equals(loginRequest.getMotDePasse())) {
+            	java.nio.file.Path path = Paths.get(consultant.getPhotoProfile());
+            	consultant.setPhotoProfile(path.getFileName().toString());
+                // Retourner l'objet ConsultantEntity après une authentification réussie
+                return ResponseEntity.ok(consultant);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mot de passe incorrect");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Consultant non trouvé");
+        }
+    }
     
     @DeleteMapping("delete/{consultantId}")
     public ResponseEntity<String> deleteConsultant(@PathVariable Long consultantId) {
