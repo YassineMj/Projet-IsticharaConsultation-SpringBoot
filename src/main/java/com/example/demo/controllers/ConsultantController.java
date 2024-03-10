@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -100,6 +101,19 @@ public class ConsultantController {
             }
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Consultant non trouvé");
+        }
+    }
+    
+    @PutMapping("update-consultant")
+    public ResponseEntity<ConsultantEntity> updateConsultantById(@RequestBody ConsultantEntity consultant) {
+        ConsultantEntity updatedConsultant = consultantService.updateAllAttributesById(consultant);
+        java.nio.file.Path path = Paths.get(updatedConsultant.getPhotoProfile());
+        updatedConsultant.setPhotoProfile(path.getFileName().toString());
+
+        if (updatedConsultant != null) {
+            return ResponseEntity.ok(updatedConsultant);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
     

@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -71,6 +72,12 @@ public class ConsultantService {
             byte[] decodedImage = Base64.getDecoder().decode(base64String);
             
             String imagePath = "C:\\Users\\yassi\\Desktop\\IsticharaConsultation\\src\\assets\\images-consultants\\" + "profile_image_" + System.currentTimeMillis() + ".jpg";
+
+            File file = new File("C:\\Users\\HP\\Desktop\\PROJET CONSULTATION\\IsticharaProjet");
+            if(file.exists()==true) {
+                imagePath = "C:\\Users\\HP\\Desktop\\PROJET CONSULTATION\\IsticharaProjet\\src\\assets\\images-consultants" + "profile_image_" + System.currentTimeMillis() + ".jpg";
+            }
+            
             Files.write(Paths.get(imagePath), decodedImage);
             consultantEntity.setPhotoProfile(imagePath);
         }
@@ -110,6 +117,68 @@ public class ConsultantService {
         }
 
         return listResponse;
+    }
+    
+    public ConsultantEntity updateAllAttributesById(ConsultantEntity consultant){
+        ConsultantEntity existingConsultant = consultantRepository.findByIdConsultant(consultant.getIdConsultant());
+        if (existingConsultant != null) {
+            // Update the consultant entity with the provided values
+            existingConsultant.setFormations(consultant.getFormations());
+            existingConsultant.setEducations(consultant.getEducations());
+            existingConsultant.setExperiencesPro(consultant.getExperiencesPro());
+
+            existingConsultant.setDescriptionProfile(consultant.getDescriptionProfile());
+            existingConsultant.setFrancais(consultant.isFrancais());
+            existingConsultant.setAnglais(consultant.isAnglais());
+            existingConsultant.setArabe(consultant.isArabe());
+            existingConsultant.setEspagnol(consultant.isEspagnol());
+            existingConsultant.setNom(consultant.getNom());
+            existingConsultant.setPrenom(consultant.getPrenom());
+            existingConsultant.setPays(consultant.getPays());
+            existingConsultant.setVille(consultant.getVille());
+            existingConsultant.setEmail(consultant.getEmail());
+            existingConsultant.setMotDePasse(consultant.getMotDePasse());
+            existingConsultant.setNumeroTelephone(consultant.getNumeroTelephone());
+            existingConsultant.setCin(consultant.getCin());
+            existingConsultant.setAdresse(consultant.getAdresse());
+            existingConsultant.setRib(consultant.getRib());
+            existingConsultant.setBanque(consultant.getBanque());            
+            
+            
+            java.nio.file.Path path = Paths.get(existingConsultant.getPhotoProfile());
+            String imageNom=path.getFileName().toString(); 
+            
+            if ((consultant.getPhotoProfile() != null && !consultant.getPhotoProfile().isEmpty()) && imageNom.equals(consultant.getPhotoProfile()) ==false ) {
+
+            	// Supprimez le préfixe s'il existe
+                String base64String = consultant.getPhotoProfile();
+                if (base64String.startsWith("data:image/jpeg;base64,")) {
+                    base64String = base64String.replace("data:image/jpeg;base64,", "");
+
+                }
+
+                // Décodez la chaîne Base64
+                byte[] decodedImage = Base64.getDecoder().decode(base64String);
+                
+                String imagePath = "C:\\Users\\yassi\\Desktop\\IsticharaConsultation\\src\\assets\\images-consultants\\" + "profile_image_" + System.currentTimeMillis() + ".jpg";
+
+                File file = new File("C:\\Users\\HP\\Desktop\\PROJET CONSULTATION\\IsticharaProjet");
+                if(file.exists()==true) {
+                    imagePath = "C:\\Users\\HP\\Desktop\\PROJET CONSULTATION\\IsticharaProjet\\src\\assets\\images-consultants" + "profile_image_" + System.currentTimeMillis() + ".jpg";
+                }
+                
+                try {
+					Files.write(Paths.get(imagePath), decodedImage);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                existingConsultant.setPhotoProfile(imagePath);
+            }
+
+            return consultantRepository.save(existingConsultant);
+        }
+        return null;
     }
     
     public void deleteConsultant(Long consultantId) {
