@@ -50,5 +50,12 @@ public class ConsultationController {
 	    }
 	    return new ResponseEntity<>(consultation, HttpStatus.OK);
 	}
+	
+    @GetMapping("/domaine/{idDomaine}/specialisation/{specialisation}")
+    public List<ConsultationEntity> getConsultationsByDomaineAndSpecialisation(
+            @PathVariable String idDomaine,
+            @PathVariable String specialisation) {
+        return consultationService.getConsultationsByIdDomaineAndSpecialisation(idDomaine, specialisation);
+    }
     
  }

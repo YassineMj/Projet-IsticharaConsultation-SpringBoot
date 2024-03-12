@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,4 +57,8 @@ public class ConsultationService {
 		// TODO Auto-generated method stub
 		return consultationRepository.findByIdConsultation(idConsultation);
 	}
+	
+    public List<ConsultationEntity> getConsultationsByIdDomaineAndSpecialisation(String idDomaine, String specialisation) {
+        return consultationRepository.findByConsultantDomaineIdDomaineAndConsultantSpecialisation(idDomaine, specialisation);
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.demo.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,5 +13,7 @@ public interface ConsultationRepository extends JpaRepository<ConsultationEntity
 	ConsultationEntity findByConsultantIdConsultant(String idConsultation);
 
 	ConsultationEntity findByIdConsultation(String consultationId);
+
+    List<ConsultationEntity> findByConsultantDomaineIdDomaineAndConsultantSpecialisation(String idDomaine, String specialisation);
 
 }
