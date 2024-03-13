@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -59,6 +60,13 @@ public class ConsultationService {
 	}
 	
     public List<ConsultationEntity> getConsultationsByIdDomaineAndSpecialisation(String idDomaine, String specialisation) {
-        return consultationRepository.findByConsultantDomaineIdDomaineAndConsultantSpecialisation(idDomaine, specialisation);
+        List<ConsultationEntity> listConsultations= consultationRepository.findByConsultantDomaineIdDomaineAndConsultantSpecialisation(idDomaine, specialisation);
+        
+        for(ConsultationEntity c : listConsultations) {
+        	java.nio.file.Path path = Paths.get(c.getConsultant().getPhotoProfile());
+            c.getConsultant().setPhotoProfile(path.getFileName().toString());
+        }
+        
+        return listConsultations;
     }
 }
