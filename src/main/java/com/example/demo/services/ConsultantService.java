@@ -75,7 +75,7 @@ public class ConsultantService {
 
             File file = new File("C:\\Users\\HP\\Desktop\\PROJET CONSULTATION\\IsticharaProjet");
             if(file.exists()==true) {
-                imagePath = "C:\\Users\\HP\\Desktop\\PROJET CONSULTATION\\IsticharaProjet\\src\\assets\\images-consultants" + "profile_image_" + System.currentTimeMillis() + ".jpg";
+                imagePath = "C:\\Users\\HP\\Desktop\\PROJET ANGULAR ISTICHARA CONSULTATION\\IsticharaProjet\\src\\assets\\images-consultants\\" + "profile_image_" + System.currentTimeMillis() + ".jpg";
             }
             
             Files.write(Paths.get(imagePath), decodedImage);
@@ -164,7 +164,7 @@ public class ConsultantService {
 
                 File file = new File("C:\\Users\\HP\\Desktop\\PROJET CONSULTATION\\IsticharaProjet");
                 if(file.exists()==true) {
-                    imagePath = "C:\\Users\\HP\\Desktop\\PROJET CONSULTATION\\IsticharaProjet\\src\\assets\\images-consultants" + "profile_image_" + System.currentTimeMillis() + ".jpg";
+                    imagePath = "C:\\Users\\HP\\Desktop\\PROJET ANGULAR ISTICHARA CONSULTATION\\IsticharaProjet\\src\\assets\\images-consultants\\" + "profile_image_" + System.currentTimeMillis() + ".jpg";
                 }
                 
                 try {
