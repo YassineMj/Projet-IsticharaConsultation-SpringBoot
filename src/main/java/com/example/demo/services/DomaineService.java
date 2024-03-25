@@ -1,5 +1,7 @@
 package com.example.demo.services;
 
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,14 @@ public class DomaineService {
     }
     
     public List<DomaineEntity> getAllDomaines() {
-        return domaineRepository.findAll();
+        List<DomaineEntity> domaines =new ArrayList<>();
+        domaines=domaineRepository.findAll();
+        for ( DomaineEntity d: domaines) {
+        	  java.nio.file.Path path = Paths.get(d.getPathImage());
+              d.setPathImage(path.getFileName().toString());
+        }
+        return domaines;
+        
+        
     }
 }

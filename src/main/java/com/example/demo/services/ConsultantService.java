@@ -72,8 +72,7 @@ public class ConsultantService {
             byte[] decodedImage = Base64.getDecoder().decode(base64String);
             
             String imagePath = "C:\\Users\\yassi\\Desktop\\IsticharaConsultation\\src\\assets\\images-consultants\\" + "profile_image_" + System.currentTimeMillis() + ".jpg";
-
-            File file = new File("C:\\Users\\HP\\Desktop\\PROJET CONSULTATION\\IsticharaProjet");
+            File file = new File("C:\\Users\\HP\\Desktop\\PROJET ANGULAR ISTICHARA CONSULTATION\\IsticharaProjet");
             if(file.exists()==true) {
                 imagePath = "C:\\Users\\HP\\Desktop\\PROJET ANGULAR ISTICHARA CONSULTATION\\IsticharaProjet\\src\\assets\\images-consultants\\" + "profile_image_" + System.currentTimeMillis() + ".jpg";
             }
@@ -162,7 +161,7 @@ public class ConsultantService {
                 
                 String imagePath = "C:\\Users\\yassi\\Desktop\\IsticharaConsultation\\src\\assets\\images-consultants\\" + "profile_image_" + System.currentTimeMillis() + ".jpg";
 
-                File file = new File("C:\\Users\\HP\\Desktop\\PROJET CONSULTATION\\IsticharaProjet");
+                File file = new File("C:\\Users\\HP\\Desktop\\PROJET ANGULAR ISTICHARA CONSULTATION\\IsticharaProjet");
                 if(file.exists()==true) {
                     imagePath = "C:\\Users\\HP\\Desktop\\PROJET ANGULAR ISTICHARA CONSULTATION\\IsticharaProjet\\src\\assets\\images-consultants\\" + "profile_image_" + System.currentTimeMillis() + ".jpg";
                 }
