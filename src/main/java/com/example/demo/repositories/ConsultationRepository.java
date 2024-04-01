@@ -3,6 +3,8 @@ package com.example.demo.repositories;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.entities.ConsultantEntity;
@@ -14,6 +16,6 @@ public interface ConsultationRepository extends JpaRepository<ConsultationEntity
 
 	ConsultationEntity findByIdConsultation(String consultationId);
 
-    List<ConsultationEntity> findByConsultantDomaineIdDomaineAndConsultantSpecialisation(String idDomaine, String specialisation);
+    Page<ConsultationEntity> findByConsultantDomaineIdDomaineAndConsultantSpecialisation(String idDomaine, String specialisation, org.springframework.data.domain.Pageable pageable);
 
 }

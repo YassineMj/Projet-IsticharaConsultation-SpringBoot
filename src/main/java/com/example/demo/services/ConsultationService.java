@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -59,14 +61,15 @@ public class ConsultationService {
 		return consultationRepository.findByIdConsultation(idConsultation);
 	}
 	
-    public List<ConsultationEntity> getConsultationsByIdDomaineAndSpecialisation(String idDomaine, String specialisation) {
-        List<ConsultationEntity> listConsultations= consultationRepository.findByConsultantDomaineIdDomaineAndConsultantSpecialisation(idDomaine, specialisation);
-        
-        for(ConsultationEntity c : listConsultations) {
-        	java.nio.file.Path path = Paths.get(c.getConsultant().getPhotoProfile());
-            c.getConsultant().setPhotoProfile(path.getFileName().toString());
-        }
-        
-        return listConsultations;
-    }
+	public Page<ConsultationEntity> getConsultationsByIdDomaineAndSpecialisation(String idDomaine, String specialisation, org.springframework.data.domain.Pageable pageable) {
+	    Page<ConsultationEntity> pageConsultations = consultationRepository.findByConsultantDomaineIdDomaineAndConsultantSpecialisation(idDomaine, specialisation, pageable);
+	    
+	    pageConsultations.getContent().forEach(c -> {
+	        java.nio.file.Path path = Paths.get(c.getConsultant().getPhotoProfile());
+	        c.getConsultant().setPhotoProfile(path.getFileName().toString());
+	    });
+	    
+	    return pageConsultations;
+	}
+
 }

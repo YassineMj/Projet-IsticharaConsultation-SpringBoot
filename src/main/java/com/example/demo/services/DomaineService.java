@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entities.DomaineEntity;
@@ -31,4 +34,19 @@ public class DomaineService {
         
         
     }
+    
+    public Page<DomaineEntity> getDomainesPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<DomaineEntity> domainesPage = domaineRepository.findAll(pageable);
+        
+        // Appliquer le traitement à chaque entité dans la page
+        domainesPage.getContent().forEach(domaine -> {
+            java.nio.file.Path path = Paths.get(domaine.getPathImage());
+            domaine.setPathImage(path.getFileName().toString());
+            // Ajoutez d'autres traitements ici si nécessaire
+        });
+        
+        return domainesPage;
+    }
+
 }
