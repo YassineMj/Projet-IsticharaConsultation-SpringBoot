@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.entities.ClientEntity;
 import com.example.demo.entities.ConsultantEntity;
 import com.example.demo.entities.PlanConsultationEntity;
+import com.example.demo.entities.QuestionEntity;
 import com.example.demo.entities.RendezVousEntity;
 import com.example.demo.repositories.ClientRepository;
 import com.example.demo.repositories.ConsultantRepository;
@@ -73,7 +74,7 @@ public class PaiementService {
     }
 	
     
-    public String creerDemande(DemandeRequest demandeRequest) {
+    public RendezVousEntity creerDemande(DemandeRequest demandeRequest) {
         try {
             // Création d'une nouvelle entité Client
             ClientEntity client = new ClientEntity();
@@ -84,6 +85,7 @@ public class PaiementService {
             client.setVilleClient(demandeRequest.getVilleClient());
             client.setPaysClient(demandeRequest.getPaysClient());
             client.setAdresseClient(demandeRequest.getAdresseClient());
+            client.setTelephone(demandeRequest.getTelephone());
 
             client = clientRepository.save(client);
 
@@ -113,8 +115,8 @@ public class PaiementService {
 ;
             rendezVousEntity.setPlan(plan);
             rendezVousEntity.setPaiement(intent.getId());
+            rendezVousEntity.setMessage(demandeRequest.getMessage());
             
-            rendezVousRepository.save(rendezVousEntity);
 
             // Confirmation du paiement avec une URL de retour fictive
             PaymentIntentConfirmParams confirmParams = PaymentIntentConfirmParams.builder()
@@ -125,12 +127,39 @@ public class PaiementService {
 
             
             // Retour de la réponse de succès
-            return "Rendez-vous créé avec succès";
+            return rendezVousRepository.save(rendezVousEntity);
+
         } catch (StripeException e) {
             // Gestion des erreurs et retour d'une réponse d'erreur appropriée
             e.printStackTrace();
-            return "Error: " + e.getMessage();
         }
+        return null;
     }
+    
+    
+    /*public ResponseEntity<?> getRendezVousByIdConsultant(Long idConsultant) {
+        String details = rendezVousRepository.getRendezVousByIdConsultant(idConsultant);
+        String[] parts = details.split(",");
+
+        Map<String, String> detailsMap = new HashMap();
+        if (details.equals("")==false) {
+        	detailsMap.put("nom", parts[0]);
+             detailsMap.put("email", parts[1]);
+             detailsMap.put("adresse", parts[2]);
+             detailsMap.put("telephone", parts[3]);
+             detailsMap.put("pays", parts[4]);
+             detailsMap.put("ville", parts[5]);
+             detailsMap.put("id_paiement", parts[6]);
+             detailsMap.put("date_jour", parts[7]);
+             detailsMap.put("heure_debut", parts[8]);
+             detailsMap.put("heure_fin", parts[9]);
+             detailsMap.put("id_card", parts[10]);
+             detailsMap.put("message", parts[11]);
+
+            return ResponseEntity.ok(detailsMap);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }*/
     
 }

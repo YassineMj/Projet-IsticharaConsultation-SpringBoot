@@ -20,6 +20,9 @@ public class ClientEntity {
     
     private String emailClient;
     
+    private String telephone;
+
+    
     private String villeClient;
     
     private String paysClient;
@@ -90,4 +93,12 @@ public class ClientEntity {
     public void setAdresseClient(String adresseClient) {
         this.adresseClient = adresseClient;
     }
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
 }

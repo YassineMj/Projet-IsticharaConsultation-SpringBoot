@@ -12,6 +12,10 @@ public class DemandeRequest {
     private Long idConsultant;
     private Long idPlan;
     private double prixTotal;
+    private String message;
+    private String telephone;
+
+
 
     // Constructeur par défaut
     public DemandeRequest() {}
@@ -96,4 +100,20 @@ public class DemandeRequest {
     public void setPrixTotal(double prixTotal) {
         this.prixTotal = prixTotal;
     }
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
 }

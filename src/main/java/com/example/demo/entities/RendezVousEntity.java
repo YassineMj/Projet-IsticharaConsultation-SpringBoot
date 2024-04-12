@@ -21,6 +21,8 @@ public class RendezVousEntity {
 
 
     private String paiement;
+    private String message;
+
 
     @ManyToOne
     @JoinColumn(name = "id_plan")
@@ -66,4 +68,12 @@ public class RendezVousEntity {
     public void setPlan(PlanConsultationEntity plan) {
         this.plan = plan;
     }
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
 }
