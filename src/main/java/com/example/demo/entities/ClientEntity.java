@@ -16,6 +16,8 @@ public class ClientEntity {
     
     private String idCardStripe;
     
+    private String numCard;
+    
     private String nomClient;
     
     private String emailClient;
@@ -100,5 +102,13 @@ public class ClientEntity {
 
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
+	}
+
+	public String getNumCard() {
+		return numCard;
+	}
+
+	public void setNumCard(String numCard) {
+		this.numCard = numCard;
 	}
 }

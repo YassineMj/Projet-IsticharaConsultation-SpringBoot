@@ -17,6 +17,7 @@ import com.example.demo.entities.ConsultantEntity;
 import com.example.demo.entities.PlanConsultationEntity;
 import com.example.demo.entities.QuestionEntity;
 import com.example.demo.entities.RendezVousEntity;
+import com.example.demo.reponses.RendezVousResponse;
 import com.example.demo.repositories.ClientRepository;
 import com.example.demo.repositories.ConsultantRepository;
 import com.example.demo.repositories.PlanConsultationRepository;
@@ -86,7 +87,7 @@ public class PaiementService {
             client.setPaysClient(demandeRequest.getPaysClient());
             client.setAdresseClient(demandeRequest.getAdresseClient());
             client.setTelephone(demandeRequest.getTelephone());
-
+            client.setNumCard(demandeRequest.getNumCard());
             client = clientRepository.save(client);
 
             // Configuration de la clé secrète de Stripe en mode test
@@ -137,29 +138,39 @@ public class PaiementService {
     }
     
     
-    /*public ResponseEntity<?> getRendezVousByIdConsultant(Long idConsultant) {
-        String details = rendezVousRepository.getRendezVousByIdConsultant(idConsultant);
-        String[] parts = details.split(",");
-
-        Map<String, String> detailsMap = new HashMap();
-        if (details.equals("")==false) {
-        	detailsMap.put("nom", parts[0]);
-             detailsMap.put("email", parts[1]);
-             detailsMap.put("adresse", parts[2]);
-             detailsMap.put("telephone", parts[3]);
-             detailsMap.put("pays", parts[4]);
-             detailsMap.put("ville", parts[5]);
-             detailsMap.put("id_paiement", parts[6]);
-             detailsMap.put("date_jour", parts[7]);
-             detailsMap.put("heure_debut", parts[8]);
-             detailsMap.put("heure_fin", parts[9]);
-             detailsMap.put("id_card", parts[10]);
-             detailsMap.put("message", parts[11]);
-
-            return ResponseEntity.ok(detailsMap);
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> getRendezVousByIdConsultant(String idConsultant) {
+        List<String> details = rendezVousRepository.getRendezVousByIdConsultant(idConsultant);
+        List<RendezVousResponse> listRendezVousResponse=new ArrayList<>();
+        
+        for(int i=0;i<details.size();i++) {
+        	
+        	String[] parts = details.get(i).split(",");
+        	RendezVousResponse rendezVousResponse = new RendezVousResponse();
+            if (details.equals("")==false) {
+            	
+            	rendezVousResponse.detailsMap.put("idRendezVous", parts[0]);
+            	rendezVousResponse.detailsMap.put("nom", parts[1]);
+            	rendezVousResponse.detailsMap.put("email", parts[2]);
+            	rendezVousResponse.detailsMap.put("adresse", parts[3]);
+            	rendezVousResponse.detailsMap.put("telephone", parts[4]);
+            	rendezVousResponse.detailsMap.put("pays", parts[5]);
+            	rendezVousResponse.detailsMap.put("ville", parts[6]);
+            	rendezVousResponse.detailsMap.put("id_paiement", parts[7]);
+            	rendezVousResponse.detailsMap.put("date_jour", parts[8]);
+            	rendezVousResponse.detailsMap.put("heure_debut", parts[9]);
+            	rendezVousResponse.detailsMap.put("heure_fin", parts[10]);
+            	rendezVousResponse.detailsMap.put("id_card", parts[11]);
+            	rendezVousResponse.detailsMap.put("message", parts[12]);
+            	rendezVousResponse.detailsMap.put("idPlan", parts[13]);
+            	rendezVousResponse.detailsMap.put("numCard", parts[14]);
+            }
+          listRendezVousResponse.add(rendezVousResponse);
+        } 
+        if(listRendezVousResponse.size()>0)
+        {
+        	return ResponseEntity.ok(listRendezVousResponse);
         }
-    }*/
-    
+        return ResponseEntity.notFound().build();
+    }
+   
 }

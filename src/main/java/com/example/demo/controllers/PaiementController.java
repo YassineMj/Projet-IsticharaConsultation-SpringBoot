@@ -41,4 +41,10 @@ public class PaiementController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    
+    @GetMapping("/rendez-vous-By-id-consultant/{idConsultant}")
+    public ResponseEntity<?> getRendezVousByIdConsultant(@PathVariable String idConsultant) {
+        ResponseEntity<?> response = paiementService.getRendezVousByIdConsultant(idConsultant);
+        return response;
+    }
 }

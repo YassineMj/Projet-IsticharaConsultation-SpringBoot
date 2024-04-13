@@ -4,6 +4,7 @@ public class DemandeRequest {
 
     private String idClientStripe;
     private String idCardStripe;
+    private String numCard;
     private String nomClient;
     private String emailClient;
     private String villeClient;
@@ -115,5 +116,13 @@ public class DemandeRequest {
 
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
+	}
+
+	public String getNumCard() {
+		return numCard;
+	}
+
+	public void setNumCard(String numCard) {
+		this.numCard = numCard;
 	}
 }
