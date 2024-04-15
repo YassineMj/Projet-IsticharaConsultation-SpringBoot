@@ -11,9 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.entities.RendezVousAccepteEntity;
 import com.example.demo.entities.RendezVousEntity;
 import com.example.demo.requests.DemandeRequest;
+import com.example.demo.requests.LienMeetRequest;
 import com.example.demo.services.PaiementService;
+import com.stripe.Stripe;
+import com.stripe.model.Refund;
+import com.stripe.param.RefundCreateParams;
 
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -31,7 +36,6 @@ public class PaiementController {
         return response;
     }
     
-
     @PostMapping("/creer-demande")
     public ResponseEntity<RendezVousEntity> creerDemande(@RequestBody DemandeRequest demandeRequest) {
         RendezVousEntity rendezVousEntity = paiementService.creerDemande(demandeRequest);
@@ -47,4 +51,24 @@ public class PaiementController {
         ResponseEntity<?> response = paiementService.getRendezVousByIdConsultant(idConsultant);
         return response;
     }
+    
+    @GetMapping("/refuse-rendez-vous/{idRendezVous}")
+    public ResponseEntity<?> refuseRendezVous(@PathVariable long idRendezVous) {
+        try {
+            // Appel de la méthode de service pour refuser le rendez-vous
+            ResponseEntity<?> response = paiementService.refuseRendezVous(idRendezVous);
+            return ResponseEntity.ok(response.getBody());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    } 
+
+    @PostMapping("/accepte-rendez-vous")
+	public ResponseEntity<?> sendLienMeet(@RequestBody LienMeetRequest lienRequest) {
+	    String[] recipients = {lienRequest.emailClient, lienRequest.emailConsultant};
+
+	    RendezVousAccepteEntity response=paiementService.sendEmail(recipients,"lien consultation" , "date de consultation : "+lienRequest.date+"\n\nheure debut : "+lienRequest.heureDebut+"\n\nCliquez sur le lien ci-dessous pour accéder à la consultation : \n\n"+lienRequest.lien , lienRequest.idRendezVous , lienRequest.lien);
+	    return ResponseEntity.ok(response);
+	}
+
 }

@@ -10,24 +10,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entities.ClientEntity;
 import com.example.demo.entities.ConsultantEntity;
 import com.example.demo.entities.PlanConsultationEntity;
 import com.example.demo.entities.QuestionEntity;
+import com.example.demo.entities.RendezVousAccepteEntity;
 import com.example.demo.entities.RendezVousEntity;
 import com.example.demo.reponses.RendezVousResponse;
 import com.example.demo.repositories.ClientRepository;
 import com.example.demo.repositories.ConsultantRepository;
 import com.example.demo.repositories.PlanConsultationRepository;
+import com.example.demo.repositories.RendezVousAccepteRepository;
 import com.example.demo.repositories.RendezVousRepository;
 import com.example.demo.requests.DemandeRequest;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
+import com.stripe.model.Refund;
 import com.stripe.param.PaymentIntentConfirmParams;
 import com.stripe.param.PaymentIntentCreateParams;
+import com.stripe.param.RefundCreateParams;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -45,6 +51,12 @@ public class PaiementService {
     
     @Autowired
     private RendezVousRepository rendezVousRepository;
+    
+    @Autowired
+	private JavaMailSender javaMailSender;
+    
+    @Autowired
+    private RendezVousAccepteRepository rendezVousAccepteRepository;
     
     @Value("${stripe.apikey}")
     private String stripeSecretkey;
@@ -172,5 +184,60 @@ public class PaiementService {
         }
         return ResponseEntity.notFound().build();
     }
-   
+    
+    
+    public ResponseEntity<?> refuseRendezVous(long idRendezVous){
+        
+    	try {
+    		RendezVousEntity rendezVousEntity=rendezVousRepository.getById(idRendezVous);
+        	rendezVousEntity.setRefuse(true);
+        	
+        	// Configuration de la clé secrète de Stripe en mode test
+            Stripe.apiKey = stripeSecretkey;
+
+            // Création du remboursement
+            RefundCreateParams refundParams = RefundCreateParams.builder()
+                    .setPaymentIntent(rendezVousEntity.getPaiement()) // Identifiant du paiement à rembourser
+                    .build();
+
+            Refund refund = Refund.create(refundParams);
+
+            // Affichage de l'ID du remboursement créé
+            System.out.println("Refund created: " + refund.getId());
+
+            // Retour de la réponse de succès        	
+        	return ResponseEntity.ok(rendezVousRepository.save(rendezVousEntity));
+    	}catch (Exception e) {
+            return ResponseEntity.notFound().build();
+		}
+    	
+     }
+ 
+    public RendezVousAccepteEntity sendEmail(String[] toEmail , String subject , String body , long idRendezVous , String lien) {
+    	try
+    	{
+    		//modification dial accepte f rendez-vous
+    		RendezVousEntity rendezVousEntity=rendezVousRepository.getById(idRendezVous);
+        	rendezVousEntity.setAccepte(true);
+        	rendezVousRepository.save(rendezVousEntity);
+        	
+        	//ajouter rendez f table accepte 
+        	RendezVousAccepteEntity rendezVousAccepteEntity=new RendezVousAccepteEntity();
+        	rendezVousAccepteEntity.setRendezVous(rendezVousEntity);
+        	rendezVousAccepteEntity.setLienMeet(lien);
+        	
+        	//send email
+    		SimpleMailMessage message = new SimpleMailMessage();
+    		message.setFrom("istichara66@gmail.com");
+    		message.setTo(toEmail);
+    		message.setText(body);
+    		message.setSubject(subject);
+    		
+    		javaMailSender.send(message);
+    		
+    		return rendezVousAccepteRepository.save(rendezVousAccepteEntity);
+    	}catch (Exception e) {
+            return null;
+		}	
+	}
 }

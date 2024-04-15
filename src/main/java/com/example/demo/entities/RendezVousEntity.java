@@ -27,6 +27,10 @@ public class RendezVousEntity {
     @ManyToOne
     @JoinColumn(name = "id_plan")
     private PlanConsultationEntity plan;
+    
+    private Boolean accepte=null;
+    private Boolean refuse=null;
+
 
     // Getters and setters
     public Long getId() {
@@ -75,5 +79,21 @@ public class RendezVousEntity {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public Boolean getAccepte() {
+		return accepte;
+	}
+
+	public void setAccepte(Boolean accepte) {
+		this.accepte = accepte;
+	}
+
+	public Boolean getRefuse() {
+		return refuse;
+	}
+
+	public void setRefuse(Boolean refuse) {
+		this.refuse = refuse;
 	}
 }
