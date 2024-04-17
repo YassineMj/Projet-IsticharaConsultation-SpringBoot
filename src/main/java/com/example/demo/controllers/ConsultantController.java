@@ -40,6 +40,10 @@ public class ConsultantController {
     @PostMapping
     public ResponseEntity<Map<String, String>> addConsultant(@RequestBody ConsultantRequest consultantRequest) {
         try {
+        	 if (consultantRepository.existsByEmail(consultantRequest.getEmail())==true) {
+                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", "L'e-mail existe déjà."));
+             }
+        	 
             String idConsultant = consultantService.saveConsultant(consultantRequest);
             Map<String, String> response = new HashMap<>();
             response.put("consultantId", idConsultant);

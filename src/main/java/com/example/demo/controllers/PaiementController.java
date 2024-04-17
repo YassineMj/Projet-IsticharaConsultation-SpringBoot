@@ -64,11 +64,20 @@ public class PaiementController {
     } 
 
     @PostMapping("/accepte-rendez-vous")
-	public ResponseEntity<?> sendLienMeet(@RequestBody LienMeetRequest lienRequest) {
-	    String[] recipients = {lienRequest.emailClient, lienRequest.emailConsultant};
+    public ResponseEntity<?> sendLienMeet(@RequestBody LienMeetRequest lienRequest) {
+        try {
+            String[] recipients = {lienRequest.emailClient, lienRequest.emailConsultant};
 
-	    RendezVousAccepteEntity response=paiementService.sendEmail(recipients,"lien consultation" , "date de consultation : "+lienRequest.date+"\n\nheure debut : "+lienRequest.heureDebut+"\n\nCliquez sur le lien ci-dessous pour accéder à la consultation : \n\n"+lienRequest.lien , lienRequest.idRendezVous , lienRequest.lien);
-	    return ResponseEntity.ok(response);
-	}
+            ResponseEntity<Object> response = paiementService.sendEmail(recipients,
+                "lien consultation",
+                "date de consultation : " + lienRequest.date + "\n\nheure debut : " + lienRequest.heureDebut + "\n\nCliquez sur le lien ci-dessous pour accéder à la consultation : \n\n" + lienRequest.lien,
+                lienRequest.idRendezVous,
+                lienRequest.lien);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de l'envoi de l'email : " + e.getMessage());
+        }
+    }
 
 }

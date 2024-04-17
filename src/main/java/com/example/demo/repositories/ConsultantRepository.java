@@ -13,5 +13,5 @@ public interface ConsultantRepository extends JpaRepository<ConsultantEntity, Lo
 	List<ConsultantEntity> findByDomaineIdDomaine(String idDomaine);
 	ConsultantEntity findByIdConsultant(String idConsultant);
 	Optional<ConsultantEntity> findByEmail(String email);
-	
+	boolean existsByEmail(String email);
 }

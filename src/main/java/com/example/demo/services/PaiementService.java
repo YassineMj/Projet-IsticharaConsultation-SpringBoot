@@ -213,31 +213,42 @@ public class PaiementService {
     	
      }
  
-    public RendezVousAccepteEntity sendEmail(String[] toEmail , String subject , String body , long idRendezVous , String lien) {
-    	try
-    	{
-    		//modification dial accepte f rendez-vous
-    		RendezVousEntity rendezVousEntity=rendezVousRepository.getById(idRendezVous);
-        	rendezVousEntity.setAccepte(true);
-        	rendezVousRepository.save(rendezVousEntity);
-        	
-        	//ajouter rendez f table accepte 
-        	RendezVousAccepteEntity rendezVousAccepteEntity=new RendezVousAccepteEntity();
-        	rendezVousAccepteEntity.setRendezVous(rendezVousEntity);
-        	rendezVousAccepteEntity.setLienMeet(lien);
-        	
-        	//send email
-    		SimpleMailMessage message = new SimpleMailMessage();
-    		message.setFrom("istichara66@gmail.com");
-    		message.setTo(toEmail);
-    		message.setText(body);
-    		message.setSubject(subject);
-    		
-    		javaMailSender.send(message);
-    		
-    		return rendezVousAccepteRepository.save(rendezVousAccepteEntity);
-    	}catch (Exception e) {
-            return null;
-		}	
-	}
+    public ResponseEntity<Object> sendEmail(String[] toEmail, String subject, String body, long idRendezVous, String lien) {
+        try {
+            // Modification du rendez-vous principal
+            RendezVousEntity rendezVousEntity = rendezVousRepository.getById(idRendezVous);
+            rendezVousEntity.setAccepte(true);
+            rendezVousEntity = rendezVousRepository.save(rendezVousEntity);
+
+            // Recherche des rendez-vous avec le même idPlan
+            List<RendezVousEntity> autresRendezVous = rendezVousRepository.findByPlanId(rendezVousEntity.getPlan().getId());
+
+            // Modification des autres rendez-vous en mettant refuse à true
+            for (RendezVousEntity rdv : autresRendezVous) {
+                if (rdv.getId() != rendezVousEntity.getId()) {
+                    refuseRendezVous(rdv.getId());
+                }
+            }
+
+            // Ajout du rendez-vous accepté dans la table accepte
+            RendezVousAccepteEntity rendezVousAccepteEntity = new RendezVousAccepteEntity();
+            rendezVousAccepteEntity.setRendezVous(rendezVousEntity);
+            rendezVousAccepteEntity.setLienMeet(lien);
+            rendezVousAccepteRepository.save(rendezVousAccepteEntity);
+
+            // Envoi de l'email
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("istichara66@gmail.com");
+            message.setTo(toEmail);
+            message.setText(body);
+            message.setSubject(subject);
+            javaMailSender.send(message);
+
+            return ResponseEntity.ok("Email envoyé avec succès");
+        } catch (Exception e) {
+            // Gérer l'exception selon vos besoins
+            System.out.println("Une erreur s'est produite : " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de l'envoi de l'email");
+        }
+    }
 }
