@@ -72,4 +72,13 @@ public class ConsultationService {
 	    return pageConsultations;
 	}
 
+	public ResponseEntity<ConsultationEntity> modifierConsultation(String idConsultant,ConsultationRequest consultation) {
+		ConsultationEntity consultationEntity= consultationRepository.findByConsultantIdConsultant(idConsultant);
+		consultationEntity.setDescription(consultation.getDescription());
+		consultationEntity.setPrix(consultation.getPrix());
+		consultationEntity.setDuree(consultation.getDuree());
+		
+        return new ResponseEntity<>(consultationRepository.save(consultationEntity), HttpStatus.CREATED);
+	}
+
 }

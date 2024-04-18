@@ -51,9 +51,13 @@ public class PlanConsultationController {
     }
     
     @DeleteMapping("delete-plan/{id}")
-    public ResponseEntity<String> supprimerPlanConsultation(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> supprimerPlanConsultation(@PathVariable Long id) {
         planConsultationService.supprimerPlanConsultation(id);
-        return ResponseEntity.ok("PlanConsultation supprimée avec succès.");
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "PlanConsultation supprimée avec succès.");
+        
+        return ResponseEntity.ok(response);
     }
     
     @GetMapping("/check-plan/{idPlan}")
