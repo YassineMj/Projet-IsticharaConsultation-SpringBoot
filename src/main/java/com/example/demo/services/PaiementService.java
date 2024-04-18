@@ -202,9 +202,18 @@ public class PaiementService {
 
             Refund refund = Refund.create(refundParams);
 
+            // Envoi de l'email
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("istichara66@gmail.com");
+            message.setTo(rendezVousEntity.getClient().getEmailClient());
+            message.setText("Nous regrettons de devoir refuser le rendez-vous et vous assurez que le remboursement effectué.");
+            message.setSubject("Refus de rendez-vous");
+            javaMailSender.send(message);
+            
             // Affichage de l'ID du remboursement créé
             System.out.println("Refund created: " + refund.getId());
 
+            
             // Retour de la réponse de succès        	
         	return ResponseEntity.ok(rendezVousRepository.save(rendezVousEntity));
     	}catch (Exception e) {
