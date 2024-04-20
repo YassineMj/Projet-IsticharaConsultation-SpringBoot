@@ -52,6 +52,18 @@ public class PaiementController {
         return response;
     }
     
+    @GetMapping("/rendez-vous-refuser-By-id-consultant/{idConsultant}")
+    public ResponseEntity<?> getRendezVousRefuserByIdConsultant(@PathVariable String idConsultant) {
+        ResponseEntity<?> response = paiementService.getRendezVousRefuserByIdConsultant(idConsultant);
+        return response;
+    }
+    
+    @GetMapping("/rendez-vous-accepter-By-id-consultant/{idConsultant}")
+    public ResponseEntity<?> getRendezVousAccepterByIdConsultant(@PathVariable String idConsultant) {
+        ResponseEntity<?> response = paiementService.getRendezVousAccepterByIdConsultant(idConsultant);
+        return response;
+    }
+    
     @GetMapping("/refuse-rendez-vous/{idRendezVous}")
     public ResponseEntity<?> refuseRendezVous(@PathVariable long idRendezVous) {
         try {

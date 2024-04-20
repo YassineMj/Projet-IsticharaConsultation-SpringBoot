@@ -57,7 +57,7 @@ public class PaiementService {
     
     @Autowired
     private RendezVousAccepteRepository rendezVousAccepteRepository;
-    
+        
     @Value("${stripe.apikey}")
     private String stripeSecretkey;
 	
@@ -260,4 +260,79 @@ public class PaiementService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de l'envoi de l'email");
         }
     }
+    
+    public ResponseEntity<?> getRendezVousRefuserByIdConsultant(String idConsultant) {
+        List<String> details = rendezVousRepository.getRendezVousRefuserByIdConsultant(idConsultant);
+        List<RendezVousResponse> listRendezVousResponse=new ArrayList<>();
+        
+        for(int i=0;i<details.size();i++) {
+        	
+        	String[] parts = details.get(i).split(",");
+        	RendezVousResponse rendezVousResponse = new RendezVousResponse();
+            if (details.equals("")==false) {
+            	
+            	rendezVousResponse.detailsMap.put("idRendezVous", parts[0]);
+            	rendezVousResponse.detailsMap.put("nom", parts[1]);
+            	rendezVousResponse.detailsMap.put("email", parts[2]);
+            	rendezVousResponse.detailsMap.put("adresse", parts[3]);
+            	rendezVousResponse.detailsMap.put("telephone", parts[4]);
+            	rendezVousResponse.detailsMap.put("pays", parts[5]);
+            	rendezVousResponse.detailsMap.put("ville", parts[6]);
+            	rendezVousResponse.detailsMap.put("id_paiement", parts[7]);
+            	rendezVousResponse.detailsMap.put("date_jour", parts[8]);
+            	rendezVousResponse.detailsMap.put("heure_debut", parts[9]);
+            	rendezVousResponse.detailsMap.put("heure_fin", parts[10]);
+            	rendezVousResponse.detailsMap.put("id_card", parts[11]);
+            	rendezVousResponse.detailsMap.put("message", parts[12]);
+            	rendezVousResponse.detailsMap.put("idPlan", parts[13]);
+            	rendezVousResponse.detailsMap.put("numCard", parts[14]);
+            }
+          listRendezVousResponse.add(rendezVousResponse);
+        } 
+        if(listRendezVousResponse.size()>0)
+        {
+        	return ResponseEntity.ok(listRendezVousResponse);
+        }
+        return ResponseEntity.notFound().build();
+    }
+    
+    
+    public ResponseEntity<?> getRendezVousAccepterByIdConsultant(String idConsultant) {
+        List<String> details = rendezVousAccepteRepository.getRendezVousAccepterByIdConsultant(idConsultant);
+        List<RendezVousResponse> listRendezVousResponse=new ArrayList<>();
+        
+        for(int i=0;i<details.size();i++) {
+        	
+        	String[] parts = details.get(i).split(",");
+        	RendezVousResponse rendezVousResponse = new RendezVousResponse();
+            if (details.equals("")==false) {
+            	
+            	rendezVousResponse.detailsMap.put("idRendezVous", parts[0]);
+            	rendezVousResponse.detailsMap.put("nom", parts[1]);
+            	rendezVousResponse.detailsMap.put("email", parts[2]);
+            	rendezVousResponse.detailsMap.put("adresse", parts[3]);
+            	rendezVousResponse.detailsMap.put("telephone", parts[4]);
+            	rendezVousResponse.detailsMap.put("pays", parts[5]);
+            	rendezVousResponse.detailsMap.put("ville", parts[6]);
+            	rendezVousResponse.detailsMap.put("id_paiement", parts[7]);
+            	rendezVousResponse.detailsMap.put("date_jour", parts[8]);
+            	rendezVousResponse.detailsMap.put("heure_debut", parts[9]);
+            	rendezVousResponse.detailsMap.put("heure_fin", parts[10]);
+            	rendezVousResponse.detailsMap.put("id_card", parts[11]);
+            	rendezVousResponse.detailsMap.put("message", parts[12]);
+            	rendezVousResponse.detailsMap.put("idPlan", parts[13]);
+            	rendezVousResponse.detailsMap.put("numCard", parts[14]);
+            	rendezVousResponse.detailsMap.put("lien", parts[15]);
+
+            }
+          listRendezVousResponse.add(rendezVousResponse);
+        } 
+        if(listRendezVousResponse.size()>0)
+        {
+        	return ResponseEntity.ok(listRendezVousResponse);
+        }
+        return ResponseEntity.notFound().build();
+    }
+    
+    
 }
