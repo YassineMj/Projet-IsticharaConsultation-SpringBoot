@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.entities.ConsultantEntity;
+import com.example.demo.entities.DomaineEntity;
 import com.example.demo.reponses.ConsultantResponseDomaine;
 
 public interface ConsultantRepository extends JpaRepository<ConsultantEntity, Long> {
@@ -14,4 +15,5 @@ public interface ConsultantRepository extends JpaRepository<ConsultantEntity, Lo
 	ConsultantEntity findByIdConsultant(String idConsultant);
 	Optional<ConsultantEntity> findByEmail(String email);
 	boolean existsByEmail(String email);
+	long countByDomaine(DomaineEntity domaine);
 }

@@ -23,10 +23,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entities.ConsultantEntity;
+import com.example.demo.entities.DemandeCompteEntity;
+import com.example.demo.entities.DomaineEntity;
 import com.example.demo.reponses.ConsultantResponseDomaine;
 import com.example.demo.repositories.ConsultantRepository;
 import com.example.demo.requests.ConsultantAuthRequest;
-import com.example.demo.requests.ConsultantRequest;
+import com.example.demo.requests.DemandeComptetRequest;
 import com.example.demo.services.ConsultantService;
 
 @RestController
@@ -36,7 +38,10 @@ public class ConsultantController {
 
     @Autowired
     private ConsultantService consultantService;
-
+    
+    @Autowired
+    private ConsultantRepository consultantRepository;
+/*
     @PostMapping
     public ResponseEntity<Map<String, String>> addConsultant(@RequestBody ConsultantRequest consultantRequest) {
         try {
@@ -52,6 +57,7 @@ public class ConsultantController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("error", "Erreur lors de l'ajout du consultant : " + e.getMessage()));
         }
     }
+*/
     
     @GetMapping("domaine/{idDomaine}")
     public ResponseEntity<List<ConsultantResponseDomaine>> getConsultantsByDomaine(@PathVariable String idDomaine) {
@@ -82,9 +88,14 @@ public class ConsultantController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+    
+    //*
+    @GetMapping("get-all-consultant")
+    public List<ConsultantEntity> getAllConsultant(){
+    	return consultantService.getAllConsultant();
+    }
 
-    @Autowired
-    private ConsultantRepository consultantRepository;
+
     @PostMapping("/auth")
     public ResponseEntity<?> authenticateUser(@RequestBody ConsultantAuthRequest loginRequest) {
 

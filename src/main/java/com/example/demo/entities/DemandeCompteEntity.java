@@ -1,16 +1,46 @@
-package com.example.demo.requests;
+package com.example.demo.entities;
 
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
-public class ConsultantRequest {
 
-	private String idDomaine;
-	private List<String> formations;
+@Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+public class DemandeCompteEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(name = "idDemande")
+    private String idDemande;
+
+    @ElementCollection
+    private List<String> formations;
+
+    @ElementCollection
     private List<String> educations;
+
+    @ElementCollection
     private List<String> experiencesPro;
+
+    @ElementCollection
     private List<String> specialisation;
+    
+    @ManyToOne
+    @JoinColumn(name = "fk_id_domaine")
+    private DomaineEntity domaine;
+
     private String descriptionProfile;
     private boolean francais;
     private boolean anglais;
@@ -25,10 +55,16 @@ public class ConsultantRequest {
     private String numeroTelephone;
     private String cin;
     private String adresse;
-    private String banque;
     private String rib;
+    private String banque;
     private String photoProfile;
     
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public List<String> getFormations() {
 		return formations;
@@ -144,17 +180,17 @@ public class ConsultantRequest {
 	public void setRib(String rib) {
 		this.rib = rib;
 	}
-	public String  getPhotoProfile() {
+	public String getPhotoProfile() {
 		return photoProfile;
 	}
-	public void setPhotoProfile(String  photoProfile) {
+	public void setPhotoProfile(String photoProfile) {
 		this.photoProfile = photoProfile;
 	}
-	public String getIdDomaine() {
-		return idDomaine;
+	public DomaineEntity getDomaine() {
+		return domaine;
 	}
-	public void setIdDomaine(String idDomaine) {
-		this.idDomaine = idDomaine;
+	public void setDomaine(DomaineEntity domaine) {
+		this.domaine = domaine;
 	}
 	public String getBanque() {
 		return banque;
@@ -162,6 +198,10 @@ public class ConsultantRequest {
 	public void setBanque(String banque) {
 		this.banque = banque;
 	}
-
+	public String getIdDemande() {
+		return idDemande;
+	}
+	public void setIdDemande(String idDemande) {
+		this.idDemande = idDemande;
+	}
 }
-
