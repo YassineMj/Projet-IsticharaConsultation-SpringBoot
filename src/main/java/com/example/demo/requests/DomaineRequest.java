@@ -1,16 +1,11 @@
 package com.example.demo.requests;
 
 public class DomaineRequest {
-	private String nomDomain;
+	private String nomDomaine;
 	private String pathImage;
 	private String descriptionDomaine;
 	
-	public String getNomDomain() {
-		return nomDomain;
-	}
-	public void setNomDomain(String nomDomain) {
-		this.nomDomain = nomDomain;
-	}
+	
 	public String getPathImage() {
 		return pathImage;
 	}
@@ -22,6 +17,12 @@ public class DomaineRequest {
 	}
 	public void setDescriptionDomaine(String descriptionDomaine) {
 		this.descriptionDomaine = descriptionDomaine;
+	}
+	public String getNomDomaine() {
+		return nomDomaine;
+	}
+	public void setNomDomaine(String nomDomaine) {
+		this.nomDomaine = nomDomaine;
 	}
 	
 }

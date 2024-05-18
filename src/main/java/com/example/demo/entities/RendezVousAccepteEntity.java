@@ -18,6 +18,8 @@ public class RendezVousAccepteEntity {
     private RendezVousEntity rendezVous;
     
     private String lienMeet;
+    
+    private String idReclamation;
 
 	public Long getId() {
 		return id;
@@ -41,5 +43,13 @@ public class RendezVousAccepteEntity {
 
 	public void setLienMeet(String lienMeet) {
 		this.lienMeet = lienMeet;
+	}
+
+	public String getIdReclamation() {
+		return idReclamation;
+	}
+
+	public void setIdReclamation(String idReclamation) {
+		this.idReclamation = idReclamation;
 	}
 }

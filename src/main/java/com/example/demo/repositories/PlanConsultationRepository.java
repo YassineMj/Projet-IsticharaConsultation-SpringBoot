@@ -16,5 +16,10 @@ public interface PlanConsultationRepository extends JpaRepository<PlanConsultati
 	String detailConsultationByIdPlan(
 			@Param("idPlan") Long  idPlan);
     
-    
+    @Query(value = "SELECT COUNT(*) FROM consultant_entity co " +
+            "INNER JOIN consultation_entity c ON co.id=c.consultant_id " +
+            "INNER JOIN plan_consultation_entity p ON c.id=p.consultation_id " +
+            "WHERE co.id = ?1 " +
+            "GROUP BY c.id_consultation", nativeQuery = true)
+    long countPlanByConsultantId(long consultantId);    
 }

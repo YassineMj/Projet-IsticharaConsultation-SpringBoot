@@ -222,7 +222,7 @@ public class PaiementService {
     	
      }
  
-    public ResponseEntity<Object> sendEmail(String[] toEmail, String subject, String body, long idRendezVous, String lien) {
+    public ResponseEntity<Object> sendEmail(String[] toEmail, String subject, String body, long idRendezVous, String lien , String idReclamation) {
         try {
             // Modification du rendez-vous principal
             RendezVousEntity rendezVousEntity = rendezVousRepository.getById(idRendezVous);
@@ -243,6 +243,7 @@ public class PaiementService {
             RendezVousAccepteEntity rendezVousAccepteEntity = new RendezVousAccepteEntity();
             rendezVousAccepteEntity.setRendezVous(rendezVousEntity);
             rendezVousAccepteEntity.setLienMeet(lien);
+            rendezVousAccepteEntity.setIdReclamation(idReclamation);
             rendezVousAccepteRepository.save(rendezVousAccepteEntity);
 
             // Envoi de l'email
@@ -334,5 +335,50 @@ public class PaiementService {
         return ResponseEntity.notFound().build();
     }
     
+    public Map<String, Object> getRendezVousByReclamationId(String reclamationId) {
+        return rendezVousAccepteRepository.findRendezVousByReclamationId(reclamationId);
+    }
     
+    public Map<String, Object> valideReclamation(long idRendezVous) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            // Trouver l'entité rendezVousAccepte par idRendezVous
+            RendezVousAccepteEntity rendezVousAccepteEntity = rendezVousAccepteRepository.findByRendezVousId(idRendezVous);
+            if (rendezVousAccepteEntity == null) {
+                response.put("status", "error");
+                response.put("message", "Rendez-vous accepté non trouvé.");
+                return response;
+            }
+
+            // Supprimer l'entité rendezVousAccepte
+            rendezVousAccepteRepository.delete(rendezVousAccepteEntity);
+
+            // Trouver l'entité rendezVous par id
+            Optional<RendezVousEntity> rendezVousEntityOptional = rendezVousRepository.findById(idRendezVous);
+            if (!rendezVousEntityOptional.isPresent()) {
+                response.put("status", "error");
+                response.put("message", "Rendez-vous non trouvé.");
+                return response;
+            }
+
+            // Mettre à jour l'état du rendez-vous
+            RendezVousEntity rendezVousEntity = rendezVousEntityOptional.get();
+            rendezVousEntity.setAccepte(null);
+            rendezVousRepository.save(rendezVousEntity);
+
+            // Appeler la méthode refuseRendezVous
+            refuseRendezVous(idRendezVous);
+
+            // Retourner une réponse de succès
+            response.put("status", "success");
+            response.put("message", "La réclamation a été validée et le rendez-vous a été refusé.");
+            return response;
+        } catch (Exception e) {
+            // Gérer les exceptions
+            response.put("status", "error");
+            response.put("message", "Une erreur s'est produite lors de la validation de la réclamation.");
+            response.put("error", e.getMessage());
+            return response;
+        }
+    }
 }

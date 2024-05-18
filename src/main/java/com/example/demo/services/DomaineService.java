@@ -26,7 +26,7 @@ public class DomaineService {
 
     public DomaineEntity createDomaine(DomaineRequest domaine) {
         DomaineEntity domaineEntity=new DomaineEntity();
-        domaineEntity.setNomDomaine(domaine.getNomDomain());
+        domaineEntity.setNomDomaine(domaine.getNomDomaine());
         domaineEntity.setDescriptionDomaine(domaine.getDescriptionDomaine());
         domaineEntity.setIdDomaine(IdGenerator.generateId().toString());
         
@@ -41,10 +41,10 @@ public class DomaineService {
             // Décodez la chaîne Base64
             byte[] decodedImage = Base64.getDecoder().decode(base64String);
             
-            String imagePath = "C:\\Users\\yassi\\Desktop\\IsticharaConsultation\\src\\assets\\images-consultants\\" + "profile_image_" + System.currentTimeMillis() + ".jpg";
+            String imagePath = "C:\\Users\\yassi\\Desktop\\IsticharaConsultation\\src\\assets\\images\\" + "image_" + System.currentTimeMillis() + ".jpg";
             File file = new File("C:\\Users\\HP\\Desktop\\PROJET ANGULAR ISTICHARA CONSULTATION\\IsticharaProjet");
             if(file.exists()==true) {
-                imagePath = "C:\\Users\\HP\\Desktop\\PROJET ANGULAR ISTICHARA CONSULTATION\\IsticharaProjet\\src\\assets\\images-consultants\\" + "profile_image_" + System.currentTimeMillis() + ".jpg";
+                imagePath = "C:\\Users\\HP\\Desktop\\PROJET ANGULAR ISTICHARA CONSULTATION\\IsticharaProjet\\src\\assets\\images\\" + "image_" + System.currentTimeMillis() + ".jpg";
             }
             
             try {
@@ -96,7 +96,7 @@ public class DomaineService {
 	public DomaineEntity updateDomaine(String idDomain, DomaineRequest domaine) {
 		DomaineEntity domaineEntity= domaineRepository.findByIdDomaine(idDomain);
 		
-		domaineEntity.setNomDomaine(domaine.getNomDomain());
+		domaineEntity.setNomDomaine(domaine.getNomDomaine());
         domaineEntity.setDescriptionDomaine(domaine.getDescriptionDomaine());
         
         // Gérez le stockage de l'image
@@ -110,10 +110,10 @@ public class DomaineService {
             // Décodez la chaîne Base64
             byte[] decodedImage = Base64.getDecoder().decode(base64String);
             
-            String imagePath = "C:\\Users\\yassi\\Desktop\\IsticharaConsultation\\src\\assets\\images-consultants\\" + "profile_image_" + System.currentTimeMillis() + ".jpg";
+            String imagePath = "C:\\Users\\yassi\\Desktop\\IsticharaConsultation\\src\\assets\\images\\" + "image_" + System.currentTimeMillis() + ".jpg";
             File file = new File("C:\\Users\\HP\\Desktop\\PROJET ANGULAR ISTICHARA CONSULTATION\\IsticharaProjet");
             if(file.exists()==true) {
-                imagePath = "C:\\Users\\HP\\Desktop\\PROJET ANGULAR ISTICHARA CONSULTATION\\IsticharaProjet\\src\\assets\\images-consultants\\" + "profile_image_" + System.currentTimeMillis() + ".jpg";
+                imagePath = "C:\\Users\\HP\\Desktop\\PROJET ANGULAR ISTICHARA CONSULTATION\\IsticharaProjet\\src\\assets\\images\\" + "image_" + System.currentTimeMillis() + ".jpg";
             }
             
             try {
