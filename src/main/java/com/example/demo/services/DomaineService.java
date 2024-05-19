@@ -46,6 +46,10 @@ public class DomaineService {
             if(file.exists()==true) {
                 imagePath = "C:\\Users\\HP\\Desktop\\PROJET ANGULAR ISTICHARA CONSULTATION\\IsticharaProjet\\src\\assets\\images\\" + "image_" + System.currentTimeMillis() + ".jpg";
             }
+            file = new File("C:\\istichara\\IsticharaProjet");
+            if(file.exists()==true) {
+                imagePath = "C:\\istichara\\IsticharaProjet\\src\\assets\\images\\" + "image_" + System.currentTimeMillis() + ".jpg";
+            }
             
             try {
 				Files.write(Paths.get(imagePath), decodedImage);
@@ -115,7 +119,10 @@ public class DomaineService {
             if(file.exists()==true) {
                 imagePath = "C:\\Users\\HP\\Desktop\\PROJET ANGULAR ISTICHARA CONSULTATION\\IsticharaProjet\\src\\assets\\images\\" + "image_" + System.currentTimeMillis() + ".jpg";
             }
-            
+            file = new File("C:\\istichara\\IsticharaProjet");
+            if(file.exists()==true) {
+                imagePath = "C:\\istichara\\IsticharaProjet\\src\\assets\\images\\" + "image_" + System.currentTimeMillis() + ".jpg";
+            }
             try {
 				Files.write(Paths.get(imagePath), decodedImage);
 			} catch (IOException e) {
