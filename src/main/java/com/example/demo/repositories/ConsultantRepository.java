@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.example.demo.entities.ConsultantEntity;
 import com.example.demo.entities.DomaineEntity;
@@ -41,4 +42,8 @@ public interface ConsultantRepository extends JpaRepository<ConsultantEntity, Lo
             "INNER JOIN rendez_vous_entity rv ON co.id=rv.id_consultant " +
             "WHERE co.id = ?1 AND rv.refuse IS NULL AND rv.accepte IS NULL", nativeQuery = true)
     long countEnAttenteRvByConsultantId(long consultantId);
+    
+    @Query(value="SELECT CONCAT(c.nom, ',', c.prenom, ',', c.photo_profile) FROM consultant_entity c WHERE c.id_fire_base = :idFireBase", nativeQuery = true)
+    String findNomCompletAndImageByIdFireBase(@Param("idFireBase") String idFireBase);
+
 }

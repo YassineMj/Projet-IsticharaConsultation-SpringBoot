@@ -26,6 +26,8 @@ public class AdminEntity {
     private String travail;
     
     private String motDepasse;
+    
+    private String idFireBase;
 
     // Getters and setters
 
@@ -99,5 +101,13 @@ public class AdminEntity {
 
 	public void setMotDepasse(String motDepasse) {
 		this.motDepasse = motDepasse;
+	}
+
+	public String getIdFireBase() {
+		return idFireBase;
+	}
+
+	public void setIdFireBase(String idFireBase) {
+		this.idFireBase = idFireBase;
 	}
 }

@@ -109,7 +109,7 @@ public class DemandeCompteService {
 		return demandeCompteEntity ;
 	}
 
-	public ResponseEntity<Map<String, String>> acitiveCompte(String idDemande) {
+	public ResponseEntity<Map<String, String>> acitiveCompte(String idDemande , String idFireBase) {
 		Map<String, String> response = new HashMap<>();
 
         // Rechercher la demande par son id
@@ -141,6 +141,7 @@ public class DemandeCompteService {
             consultant.setBanque(demande.getBanque());
             consultant.setPhotoProfile(demande.getPhotoProfile());
             consultant.setIdConsultant(idDemande);
+            consultant.setIdFireBase(idFireBase);
 
             // Sauvegarder le consultant dans la base de données
             consultantRepository.save(consultant);

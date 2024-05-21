@@ -1,7 +1,9 @@
 package com.example.demo.controllers;
 
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import com.example.demo.entities.ActivityLogEntity;
 import com.example.demo.entities.AdminEntity;
 import com.example.demo.repositories.ActivityLogRepository;
 import com.example.demo.repositories.AdminRepository;
+import com.example.demo.repositories.ConsultantRepository;
 import com.example.demo.requests.ActivityRequest;
 import com.example.demo.requests.ConsultantAuthRequest;
 
@@ -34,6 +37,9 @@ public class AdminController {
 	
 	@Autowired
 	private ActivityLogRepository activityLogRepository;
+	
+	@Autowired
+	private ConsultantRepository consultantRepository;
 	
 	@PostMapping("/auth")
     public ResponseEntity<?> authenticateUser(@RequestBody ConsultantAuthRequest loginRequest) {
@@ -94,5 +100,42 @@ public class AdminController {
     @GetMapping("/get-activity/{id}")
     public List<ActivityLogEntity> getActivitiesByAdminId(@PathVariable("id") Long id) {
         return activityLogRepository.findByAdminId(id);
+    }
+    
+    @GetMapping("/get-nom-admin/{idFireBase}")
+    public ResponseEntity<Map<String, String>> getNomCompletByIdFireBase(@PathVariable String idFireBase) {
+        String nomComplet = adminRepository.findNomCompletByIdFireBase(idFireBase);
+        if (nomComplet == null) {
+            return ResponseEntity.notFound().build();
+        }
+        Map<String, String> response = new HashMap<>();
+        response.put("nomComplet", nomComplet);
+        return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping("/get-info-consultant/{idFireBase}")
+    public ResponseEntity<Map<String, String>> getConsultantInfoByIdFireBase(@PathVariable String idFireBase) {
+        String result = consultantRepository.findNomCompletAndImageByIdFireBase(idFireBase);
+        if (result == null || result.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Split the result string by commas
+        String[] parts = result.split(",", 3);
+        if (parts.length < 3) {
+            return ResponseEntity.status(500).body(Map.of("error", "Invalid data format"));
+        }
+
+        String nomComplet = parts[0] + " " + parts[1];
+        String imageConsultant = parts[2];
+        
+        java.nio.file.Path path = Paths.get(imageConsultant);
+        imageConsultant=path.getFileName().toString();
+
+        Map<String, String> response = new HashMap<>();
+        response.put("nomComplet", nomComplet);
+        response.put("imageConsultant", imageConsultant);
+
+        return ResponseEntity.ok(response);
     }
 }

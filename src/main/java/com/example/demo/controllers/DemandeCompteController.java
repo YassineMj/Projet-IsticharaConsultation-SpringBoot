@@ -59,8 +59,8 @@ public class DemandeCompteController {
     	return demandeCompteService.getDemandeCompteById(idDemande);
     }
     
-    @PostMapping("active-compte/{idDemande}")
-    public ResponseEntity<Map<String, String>> activeCompte(@PathVariable String idDemande){
-    	return demandeCompteService.acitiveCompte(idDemande);
+    @PostMapping("active-compte/{idDemande}/{idFireBase}")
+    public ResponseEntity<Map<String, String>> activeCompte(@PathVariable String idDemande , @PathVariable String idFireBase){
+    	return demandeCompteService.acitiveCompte(idDemande,idFireBase);
     }
 }

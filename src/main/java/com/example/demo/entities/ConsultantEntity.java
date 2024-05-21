@@ -47,6 +47,8 @@ public class ConsultantEntity {
     private String rib;
     private String banque;
     private String photoProfile;
+    private String idFireBase;
+
     
 	public Long getId() {
 		return id;
@@ -191,6 +193,12 @@ public class ConsultantEntity {
 	}
 	public void setBanque(String banque) {
 		this.banque = banque;
+	}
+	public String getIdFireBase() {
+		return idFireBase;
+	}
+	public void setIdFireBase(String idFireBase) {
+		this.idFireBase = idFireBase;
 	}
 
     
