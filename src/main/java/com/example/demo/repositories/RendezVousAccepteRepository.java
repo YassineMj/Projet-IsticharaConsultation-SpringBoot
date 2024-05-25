@@ -2,6 +2,7 @@ package com.example.demo.repositories;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,5 +31,7 @@ public interface RendezVousAccepteRepository extends JpaRepository<RendezVousAcc
 	Map<String, Object> findRendezVousByReclamationId(@Param("reclamationId") String reclamationId);
 
 	RendezVousAccepteEntity findByRendezVousId(long idRendezVous);
+	
+	Optional<RendezVousAccepteEntity> findByIdReclamation(String idReclamation);
 
 }
