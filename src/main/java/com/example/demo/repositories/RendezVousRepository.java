@@ -21,4 +21,15 @@ public interface RendezVousRepository extends JpaRepository<RendezVousEntity, Lo
 	boolean existsByPlanIdAndAccepte(Long idPlan, boolean b);
 
 	List<RendezVousEntity> findByPlanId(Long id);
+	
+	
+	@Query("SELECT COUNT(r) FROM RendezVousEntity r WHERE r.consultant.idConsultant = :idConsultant")
+    Long countTotalRendezVousByIdConsultant(@Param("idConsultant") String idConsultant);
+
+    @Query("SELECT COUNT(r) FROM RendezVousEntity r WHERE r.consultant.idConsultant = :idConsultant AND r.accepte = TRUE")
+    Long countAcceptedRendezVousByIdConsultant(@Param("idConsultant") String idConsultant);
+
+    @Query("SELECT COUNT(r) FROM RendezVousEntity r WHERE r.consultant.idConsultant = :idConsultant AND r.refuse = TRUE")
+    Long countRefusedRendezVousByIdConsultant(@Param("idConsultant") String idConsultant);
+
 }

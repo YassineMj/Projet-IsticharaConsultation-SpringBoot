@@ -2,11 +2,16 @@ package com.example.demo.controllers;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Year;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,8 +30,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.entities.ConsultantEntity;
 import com.example.demo.entities.DemandeCompteEntity;
 import com.example.demo.entities.DomaineEntity;
+import com.example.demo.entities.PlanConsultationEntity;
+import com.example.demo.entities.RendezVousEntity;
 import com.example.demo.reponses.ConsultantResponseDomaine;
 import com.example.demo.repositories.ConsultantRepository;
+import com.example.demo.repositories.PlanConsultationRepository;
+import com.example.demo.repositories.ReclamationRepository;
+import com.example.demo.repositories.RendezVousRepository;
 import com.example.demo.requests.ConsultantAuthRequest;
 import com.example.demo.requests.DemandeComptetRequest;
 import com.example.demo.services.ConsultantService;
@@ -136,5 +146,95 @@ public class ConsultantController {
     public ResponseEntity<String> deleteConsultant(@PathVariable Long consultantId) {
         consultantService.deleteConsultant(consultantId);
         return ResponseEntity.ok("Consultant supprimé avec succès.");
+    }
+    
+    @Autowired
+    private RendezVousRepository rendezVousRepository;
+
+    @GetMapping("/stats/{idConsultant}")
+    public Map<String, Long> getRendezVousStatsByIdConsultant(@PathVariable String idConsultant) {
+        Long total = rendezVousRepository.countTotalRendezVousByIdConsultant(idConsultant);
+        Long accepted = rendezVousRepository.countAcceptedRendezVousByIdConsultant(idConsultant);
+        Long refused = rendezVousRepository.countRefusedRendezVousByIdConsultant(idConsultant);
+        
+        Map<String, Long> stats = new HashMap<>();
+        stats.put("total", total);
+        stats.put("accepted", accepted);
+        stats.put("refused", refused);
+        
+        return stats;
+    }
+    
+    @Autowired
+    private PlanConsultationRepository planConsultationRepository;
+
+    @GetMapping("/countPlanByMonth/{idConsultant}")
+    public Map<Integer, Long> getCountPlansByMonthForCurrentYear(@PathVariable String idConsultant) {
+        int currentYear = Year.now().getValue();
+        List<Map<String, Object>> result = planConsultationRepository.countPlansByMonthForYear(idConsultant, currentYear);
+        Map<Integer, Long> countsByMonth = new HashMap<>();
+        for (Map<String, Object> entry : result) {
+            countsByMonth.put((Integer) entry.get("month"), (Long) entry.get("count"));
+        }
+        return countsByMonth;
+    }
+    
+    @GetMapping("/get-plan-status/{idConsultant}")
+    public List<Map<String, Object>> getPlansWithStatus(@PathVariable String idConsultant) {
+        LocalDate currentDate = LocalDate.now();
+        List<Map<String, Object>> plans = planConsultationRepository.findPlansWithRendezVousByConsultant(idConsultant);
+
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Map<String, Object> planData : plans) {
+            Long planId = ((Number) planData.get("planId")).longValue();
+            LocalDate dateJourDebut = LocalDate.parse(planData.get("dateJourDebut").toString());
+            LocalDate dateJourFin = LocalDate.parse(planData.get("dateJourFin").toString());
+            LocalTime heureDebut = LocalTime.parse(planData.get("heureDebut").toString());
+            LocalTime heureFin = LocalTime.parse(planData.get("heureFin").toString());
+            String jourDebut = planData.get("jourDebut").toString();
+            String jourFin = planData.get("jourFin").toString();
+            Boolean accepte = planData.get("accepte") != null ? (Boolean) planData.get("accepte") : null;
+            Boolean refuse = planData.get("refuse") != null ? (Boolean) planData.get("refuse") : null;
+
+            String status;
+            if (dateJourDebut.isBefore(currentDate)) {
+                if (accepte == null && refuse == null) {
+                    status = "terminerSansReservation";
+                } else if (Boolean.TRUE.equals(accepte) && refuse == null) {
+                    status = "terminerAvecReservation";
+                } else {
+                    status = "paiement annulé";
+                }
+            } else {
+                if (accepte == null && refuse == null) {
+                    status = "enCours";
+                } else if (Boolean.TRUE.equals(accepte) && refuse == null) {
+                    status = "reserver";
+                } else {
+                    status = "indetermine";
+                }
+            }
+
+            Map<String, Object> planMap = new HashMap<>();
+            planMap.put("idPlan", planId);
+            planMap.put("dateJourDebut", dateJourDebut);
+            planMap.put("dateJourFin", dateJourFin);
+            planMap.put("heureDebut", heureDebut);
+            planMap.put("heureFin", heureFin);
+            planMap.put("jourDebut", jourDebut);
+            planMap.put("jourFin", jourFin);
+            planMap.put("status", status);
+            result.add(planMap);
+        }
+
+        return result;
+    }
+    
+    @Autowired
+    private ReclamationRepository reclamationRepository;
+    
+    @GetMapping("/avis/{idConsultant}")
+    public Map<String, Long> getFavAndDefavCount(@PathVariable String idConsultant) {
+        return reclamationRepository.countFavAndDefavByConsultantId(idConsultant);
     }
 }
