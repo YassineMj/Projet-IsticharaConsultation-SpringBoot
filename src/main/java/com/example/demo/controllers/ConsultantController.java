@@ -27,16 +27,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.entities.ActivityConsultantEntity;
+import com.example.demo.entities.ActivityLogEntity;
+import com.example.demo.entities.AdminEntity;
 import com.example.demo.entities.ConsultantEntity;
 import com.example.demo.entities.DemandeCompteEntity;
 import com.example.demo.entities.DomaineEntity;
 import com.example.demo.entities.PlanConsultationEntity;
 import com.example.demo.entities.RendezVousEntity;
 import com.example.demo.reponses.ConsultantResponseDomaine;
+import com.example.demo.repositories.ActivityConsultantRepository;
 import com.example.demo.repositories.ConsultantRepository;
 import com.example.demo.repositories.PlanConsultationRepository;
 import com.example.demo.repositories.ReclamationRepository;
 import com.example.demo.repositories.RendezVousRepository;
+import com.example.demo.requests.ActivityConsultantRequest;
+import com.example.demo.requests.ActivityRequest;
 import com.example.demo.requests.ConsultantAuthRequest;
 import com.example.demo.requests.DemandeComptetRequest;
 import com.example.demo.services.ConsultantService;
@@ -236,5 +242,26 @@ public class ConsultantController {
     @GetMapping("/avis/{idConsultant}")
     public Map<String, Long> getFavAndDefavCount(@PathVariable String idConsultant) {
         return reclamationRepository.countFavAndDefavByConsultantId(idConsultant);
+    }
+    
+    @Autowired
+    ActivityConsultantRepository activityConsultantRepository;
+    
+    @PostMapping("/add-activity")
+    public ActivityConsultantEntity addActivity(@RequestBody ActivityConsultantRequest request) {
+		ActivityConsultantEntity activityLog = new ActivityConsultantEntity();
+		
+		activityLog.setAction(request.getAction());
+		activityLog.setDescription(request.getDescription());
+		activityLog.setDate(request.getDate());
+		
+		Optional<ConsultantEntity> consultantEntity= consultantRepository.findById(request.getIdConsultant());
+		activityLog.setConsultant(consultantEntity.get());
+        return activityConsultantRepository.save(activityLog);
+    }
+	
+    @GetMapping("/get-activity/{id}")
+    public List<ActivityConsultantEntity> getActivitiesByConsultantId(@PathVariable("id") Long id) {
+        return activityConsultantRepository.findByConsultantId(id);
     }
 }
