@@ -14,7 +14,7 @@ public class DomaineEntity {
     @Column(name = "nomDomaine")
     private String nomDomaine;
 
-    @Column(name = "descriptionDomaine")
+    @Column(name = "descriptionDomaine" , length = 5000)
     private String descriptionDomaine;
 
     @Column(name = "pathImage")

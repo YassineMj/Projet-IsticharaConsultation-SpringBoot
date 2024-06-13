@@ -1,5 +1,8 @@
 package com.example.demo.entities;
 
+import javax.validation.constraints.Size;
+
+
 import jakarta.persistence.*;
 
 @Entity
@@ -18,7 +21,7 @@ public class CategorieEntity {
     @Column(name = "nomCategorie")
     private String nomCategorie;
 
-    @Column(name = "descriptionCategorie")
+    @Column(name = "descriptionCategorie" ,length = 5000)
     private String descriptionCategorie;
 
 	public String getIdCategorie() {

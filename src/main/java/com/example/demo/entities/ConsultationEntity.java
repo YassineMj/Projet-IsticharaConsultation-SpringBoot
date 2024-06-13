@@ -23,6 +23,7 @@ public class ConsultationEntity {
     @Column(name = "idConsultation")
     private String idConsultation;
     
+    @Column(length = 5000)
     private String description;
     private float prix;
     private int duree;

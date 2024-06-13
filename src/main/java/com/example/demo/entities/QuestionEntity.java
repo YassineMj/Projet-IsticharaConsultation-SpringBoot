@@ -8,7 +8,10 @@ public class QuestionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Column(length = 5000)
     private String question;
+    
+    @Column(length = 5000)
     private String reponse;
 
     // Constructeurs, getters et setters (peuvent être générés automatiquement par l'IDE)

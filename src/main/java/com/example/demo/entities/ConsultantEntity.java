@@ -30,6 +30,7 @@ public class ConsultantEntity {
     @JoinColumn(name = "fk_id_domaine")
     private DomaineEntity domaine;
 
+    @Column(length = 5000)
     private String descriptionProfile;
     private boolean francais;
     private boolean anglais;

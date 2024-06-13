@@ -21,6 +21,8 @@ public class RendezVousEntity {
 
 
     private String paiement;
+    
+    @Column(length = 5000)
     private String message;
 
 
