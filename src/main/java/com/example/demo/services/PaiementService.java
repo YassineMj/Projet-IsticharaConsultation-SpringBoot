@@ -138,6 +138,24 @@ public class PaiementService {
                     .build();
             intent.confirm(confirmParams);
 
+            //mail l consultant bli 3ando demande de rendez vous 
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("istichara66@gmail.com");
+            message.setTo(rendezVousEntity.getConsultant().getEmail());
+            message.setSubject("Nouvelle demande de rendez-vous");
+
+            String emailBody = "Bonjour " + rendezVousEntity.getConsultant().getNom() + ",\n\n" +
+                               "Vous avez reçu une nouvelle demande de rendez-vous de la part de " +
+                               rendezVousEntity.getClient().getNomClient() + " pour la date suivante : " + 
+                               rendezVousEntity.getPlan().getDateJourDebut() +":"+rendezVousEntity.getPlan().getHeureDebut() + ".\n\n" +
+                               "Veuillez consulter votre agenda pour plus de détails.\n\n" +
+                               "Cordialement,\n" +
+                               "L'équipe de gestion des rendez-vous";
+
+            message.setText(emailBody);
+
+            javaMailSender.send(message);
+            
             
             // Retour de la réponse de succès
             return rendezVousRepository.save(rendezVousEntity);
