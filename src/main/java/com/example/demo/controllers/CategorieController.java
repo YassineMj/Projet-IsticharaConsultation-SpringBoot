@@ -22,7 +22,7 @@ import com.example.demo.requests.CategorieRequest;
 import com.example.demo.services.CategorieService;
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "https://yassinemj.github.io"})
 @RestController
 @RequestMapping("/IsticharaConsultation/api/categories")
 public class CategorieController {

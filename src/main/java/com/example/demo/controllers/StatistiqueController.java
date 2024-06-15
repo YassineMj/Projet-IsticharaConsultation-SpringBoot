@@ -26,7 +26,7 @@ import com.example.demo.repositories.PlanConsultationRepository;
 import com.example.demo.repositories.RendezVousRepository;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "https://yassinemj.github.io"})
 
 @RequestMapping("IsticharaConsultation/api/statistique")
 public class StatistiqueController {

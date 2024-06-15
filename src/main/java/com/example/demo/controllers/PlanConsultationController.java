@@ -27,7 +27,7 @@ import jakarta.persistence.EntityNotFoundException;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "https://yassinemj.github.io"})
 
 @RequestMapping("IsticharaConsultation/api/plan")
 public class PlanConsultationController {

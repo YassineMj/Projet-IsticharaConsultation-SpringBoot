@@ -28,7 +28,7 @@ import com.example.demo.requests.ConsultantAuthRequest;
 
 @RestController
 @RequestMapping("IsticharaConsultation/api/admin")
-@CrossOrigin(origins = "http://localhost:4200") // Autoriser les requêtes depuis ce domaine
+@CrossOrigin(origins = {"http://localhost:4200", "https://yassinemj.github.io"})
 public class AdminController {
 
 	

@@ -30,7 +30,7 @@ import org.springframework.data.domain.PageRequest;
 
 @RestController
 @RequestMapping("IsticharaConsultation/api/consultation")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "https://yassinemj.github.io"})
 public class ConsultationController {
 
 	@Autowired

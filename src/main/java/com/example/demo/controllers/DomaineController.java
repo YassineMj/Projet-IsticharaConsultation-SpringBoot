@@ -23,7 +23,7 @@ import com.example.demo.requests.DomaineRequest;
 import com.example.demo.services.DomaineService;
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "https://yassinemj.github.io"})
 @RestController
 @RequestMapping("IsticharaConsultation/api/domaines")
 public class DomaineController {

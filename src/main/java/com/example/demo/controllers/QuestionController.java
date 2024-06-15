@@ -22,8 +22,7 @@ import com.example.demo.entities.QuestionEntity;
 import com.example.demo.services.QuestionService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
-
+@CrossOrigin(origins = {"http://localhost:4200", "https://yassinemj.github.io"})
 @RequestMapping("IsticharaConsultation/api/question")
 public class QuestionController {
 

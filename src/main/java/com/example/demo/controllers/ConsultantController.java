@@ -49,7 +49,7 @@ import com.example.demo.services.ConsultantService;
 
 @RestController
 @RequestMapping("IsticharaConsultation/api/consultant")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "https://yassinemj.github.io"})
 public class ConsultantController {
 
     @Autowired

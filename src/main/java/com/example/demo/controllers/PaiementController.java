@@ -26,8 +26,7 @@ import com.stripe.model.Refund;
 import com.stripe.param.RefundCreateParams;
 
 
-@CrossOrigin(origins = "http://localhost:4200")
-
+@CrossOrigin(origins = {"http://localhost:4200", "https://yassinemj.github.io"})
 @RestController
 @RequestMapping("/IsticharaConsultation/api/paiement")
 public class PaiementController {

@@ -24,7 +24,7 @@ import com.example.demo.repositories.RendezVousAccepteRepository;
 import com.example.demo.requests.ReclamationRequest;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "https://yassinemj.github.io"})
 
 @RequestMapping("IsticharaConsultation/api/reclamation")
 public class ReclamationController {

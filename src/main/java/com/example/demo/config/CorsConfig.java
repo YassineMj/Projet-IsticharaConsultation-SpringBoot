@@ -10,7 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/IsticharaConsultation/api/**")
-                .allowedOrigins("http://localhost:4200")
+                .allowedOrigins("http://localhost:4200", "https://yassinemj.github.io")
                 .allowedMethods("*")
                 .allowCredentials(true)
                 .allowedHeaders("*"); // Autoriser tous les en-têtes pour les requêtes OPTIONS
