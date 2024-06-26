@@ -205,19 +205,19 @@ public class ConsultantController {
             String status;
             if (dateJourDebut.isBefore(currentDate)) {
                 if (accepte == null && refuse == null) {
-                    status = "terminerSansReservation";
+                    status = "Terminer sans reservation";
                 } else if (Boolean.TRUE.equals(accepte) && refuse == null) {
-                    status = "terminerAvecReservation";
+                    status = "Terminer avec reservation";
                 } else {
-                    status = "paiement annulé";
+                    status = "Paiement annulé";
                 }
             } else {
                 if (accepte == null && refuse == null) {
-                    status = "enCours";
+                    status = "En cours sans reservation ";
                 } else if (Boolean.TRUE.equals(accepte) && refuse == null) {
-                    status = "reserver";
+                    status = "Reserver";
                 } else {
-                    status = "indetermine";
+                    status = "Indetermine";
                 }
             }
 

@@ -222,10 +222,18 @@ public class PaiementService {
 
             // Envoi de l'email
             SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("istichara66@gmail.com");
+            message.setFrom("istichara70@gmail.com");
             message.setTo(rendezVousEntity.getClient().getEmailClient());
-            message.setText("Nous regrettons de devoir refuser le rendez-vous et vous assurez que le remboursement effectué.");
             message.setSubject("Refus de rendez-vous");
+
+            String emailBody = "Bonjour,\n\n" +
+                               "Nous regrettons de devoir vous informer que votre rendez-vous a été refusé. " +
+                               "Nous tenons à vous assurer que le remboursement a été effectué.\n\n" +
+                               "Nous vous prions de nous excuser pour tout inconvénient causé.\n\n" +
+                               "Cordialement,\n" +
+                               "L'équipe de support";
+
+            message.setText(emailBody);
             javaMailSender.send(message);
             
             // Affichage de l'ID du remboursement créé
@@ -266,7 +274,7 @@ public class PaiementService {
 
             // Envoi de l'email
             SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("istichara66@gmail.com");
+            message.setFrom("istichara70@gmail.com");
             message.setTo(toEmail);
             message.setText(body);
             message.setSubject(subject);

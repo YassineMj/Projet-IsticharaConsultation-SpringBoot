@@ -83,18 +83,32 @@ public class PaiementController {
     public ResponseEntity<?> sendLienMeet(@RequestBody LienMeetRequest lienRequest) {
         try {
             String[] recipients = {lienRequest.emailClient, lienRequest.emailConsultant};
-            String idReclamation=IdGenerator.generateId();
-            ResponseEntity<Object> response = paiementService.sendEmail(recipients,
-                "lien consultation",
-                "date de consultation : " + lienRequest.date + "\n\nheure debut : " + lienRequest.heureDebut + "\n\nCliquez sur le lien ci-dessous pour accéder à la consultation : \n\n" + lienRequest.lien +"\n\nPour soumettre une réclamation, veuillez utiliser le code suivant : "+idReclamation+ " \n\nsur le formulaire de réclamation.",
-                lienRequest.idRendezVous,
-                lienRequest.lien,idReclamation);
+            String idReclamation = IdGenerator.generateId();
+            
+            String emailSubject = "Lien de consultation";
+            String emailBody = String.format(
+                "Bonjour,\n\n" +
+                "Vous avez un rendez-vous prévu le : %s\n" +
+                "Heure de début : %s\n\n" +
+                "Veuillez cliquer sur le lien ci-dessous pour accéder à la consultation :\n%s\n\n" +
+                "Si vous souhaitez soumettre une réclamation, veuillez utiliser le code suivant : %s " +
+                "dans le formulaire de réclamation.\n\n" +
+                "Cordialement,\n" +
+                "L'équipe de support",
+                lienRequest.date, lienRequest.heureDebut, lienRequest.lien, idReclamation
+            );
+
+            ResponseEntity<Object> response = paiementService.sendEmail(
+                recipients, emailSubject, emailBody,
+                lienRequest.idRendezVous, lienRequest.lien, idReclamation
+            );
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de l'envoi de l'email : " + e.getMessage());
         }
     }
+
     
     @GetMapping("/reclamation/{reclamationId}")
     public Map<String, Object> getRendezVous(@PathVariable String reclamationId) {

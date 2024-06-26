@@ -5,8 +5,8 @@ import java.util.Random;
 
 public class IdGenerator {
 
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    private static final int ID_LENGTH = 50;
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-";
+    private static final int ID_LENGTH = 15;
 
     public static String generateId() {
         Random random = new SecureRandom();
