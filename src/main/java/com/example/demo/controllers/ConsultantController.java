@@ -187,55 +187,56 @@ public class ConsultantController {
     
     @GetMapping("/get-plan-status/{idConsultant}")
     public List<Map<String, Object>> getPlansWithStatus(@PathVariable String idConsultant) {
-        LocalDate currentDate = LocalDate.now();
-        List<Map<String, Object>> plans = planConsultationRepository.findPlansWithRendezVousByConsultant(idConsultant);
+    LocalDate currentDate = LocalDate.now();
+    LocalTime currentTime = LocalTime.now();
+    List<Map<String, Object>> plans = planConsultationRepository.findPlansWithRendezVousByConsultant(idConsultant);
 
-        List<Map<String, Object>> result = new ArrayList<>();
-        for (Map<String, Object> planData : plans) {
-            Long planId = ((Number) planData.get("planId")).longValue();
-            LocalDate dateJourDebut = LocalDate.parse(planData.get("dateJourDebut").toString());
-            LocalDate dateJourFin = LocalDate.parse(planData.get("dateJourFin").toString());
-            LocalTime heureDebut = LocalTime.parse(planData.get("heureDebut").toString());
-            LocalTime heureFin = LocalTime.parse(planData.get("heureFin").toString());
-            String jourDebut = planData.get("jourDebut").toString();
-            String jourFin = planData.get("jourFin").toString();
-            Boolean accepte = planData.get("accepte") != null ? (Boolean) planData.get("accepte") : null;
-            Boolean refuse = planData.get("refuse") != null ? (Boolean) planData.get("refuse") : null;
+    List<Map<String, Object>> result = new ArrayList<>();
+    for (Map<String, Object> planData : plans) {
+        Long planId = ((Number) planData.get("planId")).longValue();
+        LocalDate dateJourDebut = LocalDate.parse(planData.get("dateJourDebut").toString());
+        LocalDate dateJourFin = LocalDate.parse(planData.get("dateJourFin").toString());
+        LocalTime heureDebut = LocalTime.parse(planData.get("heureDebut").toString());
+        LocalTime heureFin = LocalTime.parse(planData.get("heureFin").toString());
+        String jourDebut = planData.get("jourDebut").toString();
+        String jourFin = planData.get("jourFin").toString();
+        Boolean accepte = planData.get("accepte") != null ? (Boolean) planData.get("accepte") : null;
+        Boolean refuse = planData.get("refuse") != null ? (Boolean) planData.get("refuse") : null;
 
-            String status;
-            if (dateJourDebut.isBefore(currentDate)) {
-                if (accepte == null && refuse == null) {
-                    status = "Terminer sans reservation";
-                } else if (Boolean.TRUE.equals(accepte) && refuse == null) {
-                    status = "Terminer avec reservation";
-                } else {
-                    status = "Paiement annulé";
-                }
+        String status;
+        if (dateJourDebut.isBefore(currentDate) || (dateJourDebut.isEqual(currentDate) && heureDebut.isBefore(currentTime))) {
+            if (accepte == null && refuse == null) {
+                status = "Terminé sans réservation";
+            } else if (Boolean.TRUE.equals(accepte) && refuse == null) {
+                status = "Terminé avec réservation";
             } else {
-                if (accepte == null && refuse == null) {
-                    status = "En cours sans reservation ";
-                } else if (Boolean.TRUE.equals(accepte) && refuse == null) {
-                    status = "Reserver";
-                } else {
-                    status = "Indetermine";
-                }
+                status = "Paiement annulé";
             }
-
-            Map<String, Object> planMap = new HashMap<>();
-            planMap.put("idPlan", planId);
-            planMap.put("dateJourDebut", dateJourDebut);
-            planMap.put("dateJourFin", dateJourFin);
-            planMap.put("heureDebut", heureDebut);
-            planMap.put("heureFin", heureFin);
-            planMap.put("jourDebut", jourDebut);
-            planMap.put("jourFin", jourFin);
-            planMap.put("status", status);
-            result.add(planMap);
+        } else {
+            if (accepte == null && refuse == null) {
+                status = "En cours sans réservation";
+            } else if (Boolean.TRUE.equals(accepte) && refuse == null) {
+                status = "Réservé";
+            } else {
+                status = "Indéterminé";
+            }
         }
 
-        return result;
+        Map<String, Object> planMap = new HashMap<>();
+        planMap.put("idPlan", planId);
+        planMap.put("dateJourDebut", dateJourDebut);
+        planMap.put("dateJourFin", dateJourFin);
+        planMap.put("heureDebut", heureDebut);
+        planMap.put("heureFin", heureFin);
+        planMap.put("jourDebut", jourDebut);
+        planMap.put("jourFin", jourFin);
+        planMap.put("status", status);
+        result.add(planMap);
     }
-    
+
+    return result;
+}
+
     @Autowired
     private ReclamationRepository reclamationRepository;
     
