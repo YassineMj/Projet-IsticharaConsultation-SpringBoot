@@ -204,7 +204,7 @@ public class ConsultantController {
         Boolean refuse = planData.get("refuse") != null ? (Boolean) planData.get("refuse") : null;
 
         String status;
-        if (dateJourDebut.isBefore(currentDate) || (dateJourDebut.isEqual(currentDate) && heureDebut.isBefore(currentTime))) {
+        if ((dateJourDebut.isBefore(currentDate) || (dateJourDebut.isEqual(currentDate)) && heureDebut.isBefore(currentTime))) {
             if (accepte == null && refuse == null) {
                 status = "Terminé sans réservation";
             } else if (Boolean.TRUE.equals(accepte) && refuse == null) {
